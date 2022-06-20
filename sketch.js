@@ -2,6 +2,7 @@ const LENGTH = 100;
 let quadrille, board;
 let row, col;
 let lastKey;
+let score;
 
 matrixMovements = []
 
@@ -47,6 +48,7 @@ function combine() {
   for (var tile of tilesToCombine){
     board._memory2D[tile[0]][tile[1] + 1] += board._memory2D[tile[0]][tile[1] + 1]
     board._memory2D[tile[0]][tile[1]] = 0
+    score += board._memory2D[tile[0]][tile[1] + 1]
   }
 }
 
@@ -96,6 +98,7 @@ function keyPressed() {
       pushTile()
     }
     console.log('>')
+    console.log(score)
   }
   if (key == 's'){
     prev = getBoard()
@@ -109,6 +112,7 @@ function keyPressed() {
       pushTile()
     }
     console.log('v')
+    console.log(score)
   }
   if (key == 'w'){
     prev = getBoard()
@@ -126,6 +130,7 @@ function keyPressed() {
       pushTile()
     }
     console.log('^')
+    console.log(score)
   }
   if (key == 'a'){
     prev = getBoard()
@@ -146,6 +151,7 @@ function keyPressed() {
       pushTile()
     }
     console.log('<')
+    console.log(score)
   }
 }
 
