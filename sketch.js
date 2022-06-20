@@ -4,8 +4,6 @@ let row, col;
 let lastKey;
 let score = 0;
 
-matrixMovements = []
-
 function preload() {
   pics = []
   for(var i = 2; i <= 2048; i*= 2){
@@ -17,9 +15,9 @@ function setup() {
   tiles = []
   createCanvas(4 * LENGTH, 4 * LENGTH);
   board = createQuadrille([[0, 0, 0, 0],
-                          [0, 0, 0, 0],
-                          [0, 0, 0, 0],
-                          [0, 0, 0, 0]])
+                           [0, 0, 0, 0],
+                           [0, 0, 0, 0],
+                           [0, 0, 0, 0]])
   visual = createQuadrille(4, 4)
   pushTile()
   pushTile()
@@ -36,20 +34,17 @@ function draw() {
   }
 }
 
-function combine() {
-  tilesToCombine = []
+function pushTile(){
+  emptyCells = []
   for (var i = 0; i < 4; i++) {
     for (var j = 0; j < 4; j++) {
-      if (board._memory2D[i][j] == board._memory2D[i][j + 1] & board._memory2D[i][j] != 0){
-        tilesToCombine.push([i, j])
+      if (board._memory2D[i][j] == 0){
+        emptyCells.push([i, j])
       }
     }
   }
-  for (var tile of tilesToCombine){
-    board._memory2D[tile[0]][tile[1] + 1] += board._memory2D[tile[0]][tile[1] + 1]
-    board._memory2D[tile[0]][tile[1]] = 0
-    score += board._memory2D[tile[0]][tile[1] + 1]
-  }
+  randomCell = emptyCells[parseInt(random(0, emptyCells.length))]
+  board._memory2D[randomCell[0]][randomCell[1]] = random(2) > 0.5 ? 2 : 4
 }
 
 function move(){
@@ -71,24 +66,30 @@ function move(){
   }
 }
 
-function pushTile(tile = 2){
-  emptyCells = []
-  for (var i = 0; i < 4; i++) {
-    for (var j = 0; j < 4; j++) {
-      if (board._memory2D[i][j] == 0){
-        emptyCells.push([i, j])
+function combine() {
+  tilesToCombine = []
+  for (var i = 3; i >= 0; i--) {
+    for (var j = 3; j >= 0; j--) {
+      if (board._memory2D[i][j] == board._memory2D[i][j + 1] & board._memory2D[i][j] != 0){
+        tilesToCombine.push([i, j])
+        j--
       }
     }
   }
-  randomCell = emptyCells[parseInt(random(0, emptyCells.length))]
-  board._memory2D[randomCell[0]][randomCell[1]] = tile
+  console.log(tilesToCombine)
+  for (var tile of tilesToCombine) {
+    score += board._memory2D[tile[0]][tile[1]]
+    board._memory2D[tile[0]][tile[1] + 1] += board._memory2D[tile[0]][tile[1] + 1]
+    board._memory2D[tile[0]][tile[1]] = 0
+  }
 }
 
 function keyPressed() {
-  if (key == 'p') {
+  if (key) {
     console.log(board._memory2D)
+    console.log(score)
   }
-  if (key == 'd'){
+  if (keyCode === RIGHT_ARROW){
     prev = getBoard()
     move()
     combine()
@@ -97,10 +98,8 @@ function keyPressed() {
     if (prev != post) {
       pushTile()
     }
-    console.log('>')
-    console.log(score)
   }
-  if (key == 's'){
+  if (keyCode === DOWN_ARROW){
     prev = getBoard()
     board.transpose()
     move()
@@ -111,10 +110,8 @@ function keyPressed() {
     if (prev != post) {
       pushTile()
     }
-    console.log('v')
-    console.log(score)
   }
-  if (key == 'w'){
+  if (keyCode === UP_ARROW){
     prev = getBoard()
     board.reflect()
     board.transpose()
@@ -127,10 +124,8 @@ function keyPressed() {
     if (prev != post) {
       pushTile()
     }
-    console.log('^')
-    console.log(score)
   }
-  if (key == 'a'){
+  if (keyCode === LEFT_ARROW){
     prev = getBoard()
     move()
     combine()
@@ -148,8 +143,6 @@ function keyPressed() {
     if (prev != post) {
       pushTile()
     }
-    console.log('<')
-    console.log(score)
   }
 }
 
