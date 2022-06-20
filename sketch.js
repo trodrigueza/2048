@@ -2,7 +2,7 @@ const LENGTH = 100;
 let quadrille, board;
 let row, col;
 let lastKey;
-let score;
+let score = 0;
 
 matrixMovements = []
 
@@ -116,7 +116,6 @@ function keyPressed() {
   }
   if (key == 'w'){
     prev = getBoard()
-    console.log(prev)
     board.reflect()
     board.transpose()
     move()
@@ -125,7 +124,6 @@ function keyPressed() {
     board.transpose()
     board.reflect()
     post = getBoard()
-    console.log(post)
     if (prev != post) {
       pushTile()
     }
