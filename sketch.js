@@ -46,9 +46,9 @@ function combine() {
     }
   }
   for (var tile of tilesToCombine){
+    score += board._memory2D[tile[0]][tile[1]]
     board._memory2D[tile[0]][tile[1] + 1] += board._memory2D[tile[0]][tile[1] + 1]
     board._memory2D[tile[0]][tile[1]] = 0
-    score += board._memory2D[tile[0]][tile[1] + 1]
   }
 }
 
