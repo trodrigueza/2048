@@ -43,16 +43,8 @@ function pushTile(){
       }
     }
   }
-<<<<<<< HEAD
   randomCell = emptyCells[parseInt(random(0, emptyCells.length))]
   board._memory2D[randomCell[0]][randomCell[1]] = random(2) > 0.5 ? 2 : 4
-=======
-  for (var tile of tilesToCombine){
-    score += board._memory2D[tile[0]][tile[1]]
-    board._memory2D[tile[0]][tile[1] + 1] += board._memory2D[tile[0]][tile[1] + 1]
-    board._memory2D[tile[0]][tile[1]] = 0
-  }
->>>>>>> main/main
 }
 
 function move(){
