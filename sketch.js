@@ -2,7 +2,9 @@ const LENGTH = 100;
 let board, visual;
 let row, col;
 let score = 0;
-let cols = 4
+let cols = 4;
+let play = false;
+let playButton;
 
 function preload() {
   pics = [];
@@ -21,9 +23,13 @@ function setup() {
 
 function draw() {
   background('#FFFFFF');
-  drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
-  drawQuadrille(visual, {outline: '#BBBBBB00'});
-  showPics();
+  playButton = createButton('Play');
+  playButton.position(width / 2 - 50, height / 2 - 50);
+  if(play) {
+    drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
+    drawQuadrille(visual, {outline: '#BBBBBB00'});
+    showPics();
+  }
 }
 
 function pushTile(){
