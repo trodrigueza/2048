@@ -1,4 +1,4 @@
-const LENGTH = 100;
+const LENGTH = 80;
 let board, visual;
 let row, col;
 let score = 0; let scoreP;
@@ -225,9 +225,6 @@ function restart() {
 }
 
 function touchStarted() {
-  if(!fullscreen()) {
-    fullscreen(true);
-  }
   x1 = mouseX;
   y1 = mouseY;
 }
