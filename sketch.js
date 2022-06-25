@@ -1,10 +1,10 @@
-const LENGTH = 100;
+const LENGTH = 80;
 let board, visual;
 let row, col;
-let score = 0;
-let cols = 4;
+let score = 0; let scoreP;
+let cols;
 let play = false;
-let playButton;
+let playButton, restartButton, rowSlider;
 
 function preload() {
   pics = [];
@@ -14,20 +14,36 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(cols * LENGTH, cols * LENGTH);
+  rowSlider = createSlider(4, 5, 4, 1).hide();
+  cols = rowSlider.value();
+  rowSlider.changed(restart);
+  canvas = createCanvas(cols * LENGTH, cols * LENGTH);
   board = createQuadrille(cols, cols);
   visual = createQuadrille(cols, cols);
   pushTile();
   pushTile();
+
+  playButton = createButton('Play');
+  playButton.class('centerr');
+  restartButton = createButton('Restart').hide();
+  restartButton.class('leftt');
+  scoreP = createP().hide();
+  scoreP.class('downn');
 }
 
 function draw() {
   background('#FFFFFF');
-  playButton = createButton('Play');
-  playButton.position(width / 2 - 50, height / 2 - 50);
+  if(!play){
+    playButton.mousePressed(() => {play = true; playButton.hide();});
+  }
+
   if(play) {
+    scoreP.show();
+    scoreP.html(`Score: ${score}`);
+    restartButton.show()
+    restartButton.mousePressed(restart);
     drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
-    drawQuadrille(visual, {outline: '#BBBBBB00'});
+    drawQuadrille(visual, {cellLength:LENGTH, outline: '#BBBBBB00'});
     showPics();
   }
 }
@@ -42,23 +58,23 @@ function pushTile(){
     }
   }
   let randomCell = emptyCells[parseInt(random(0, emptyCells.length))];
-  board._memory2D[randomCell[0]][randomCell[1]] = random(2) > 0.5 ? 2 : 4;
+  board.fill(randomCell[0], randomCell[1], random(2) > 0.5 ? 2 : 4);
 }
 
 function move(){
   let tilesToMove = [];
   for (var i = 0; i < cols; i++){
     for (var j = 0; j < cols; j++){
-      if (board._memory2D[i][j] != 0 & board._memory2D[i][j + 1] == 0) {
+      if (board.read(i, j) != 0 & board.read(i, j + 1) == 0) {
         tilesToMove.push([i, j]);
       }
     }
   }
   
   for (var tile of tilesToMove){
-    if (board._memory2D[tile[0]][tile[1] + 1] == 0){
-      board._memory2D[tile[0]][tile[1] + 1] = board._memory2D[tile[0]][tile[1]];
-      board._memory2D[tile[0]][tile[1]] = 0;
+    if (board.read(tile[0], tile[1] + 1) == 0) {
+      board.fill(tile[0], tile[1] + 1, board.read(tile[0], tile[1]))
+      board.fill(tile[0], tile[1], 0);
     }
     move();
   }
@@ -68,16 +84,17 @@ function combine() {
   let tilesToCombine = [];
   for (var i = cols - 1; i >= 0; i--) {
     for (var j = cols - 1; j >= 0; j--) {
-      if (board._memory2D[i][j] == board._memory2D[i][j + 1] & board._memory2D[i][j] != 0){
+      if (board.read(i, j) == board.read(i, j + 1) & board.read(i, j) != 0){
         tilesToCombine.push([i, j]);
         j--;
       }
     }
   }
   for (var tile of tilesToCombine) {
-    score += board._memory2D[tile[0]][tile[1]];
-    board._memory2D[tile[0]][tile[1] + 1] += board._memory2D[tile[0]][tile[1] + 1];
-    board._memory2D[tile[0]][tile[1]] = 0;
+    sum = board.read(tile[0], tile[1]) * 2;
+    score += sum
+    board.fill(tile[0], tile[1] + 1, board.read(tile[0], tile[1] + 1) * 2);
+    board.fill(tile[0], tile[1], 0);
   }
 }
 
@@ -97,9 +114,6 @@ function keyPressed() {
   let prev, post;
   if (key) {
     console.log(score);
-    if (check()) {
-      console.log('You lose');
-    }
   }
   if (keyCode === RIGHT_ARROW){
     prev = getBoard();
@@ -146,7 +160,7 @@ function keyPressed() {
 function showPics(){
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < cols; j++) {
-      let tileNum = board.memory2D[i][j];
+      let tileNum = board.read(i, j);
       switch (tileNum) {
         case 0:
         visual.fill(i, j, 0);
@@ -189,23 +203,6 @@ function showPics(){
   }
 }
   
-function check(){
-  uncombinableTiles = []
-  transposed = board.clone()
-  transposed.transpose()
-  for (var i = cols - 1; i >= 0; i--) {
-    for (var j = cols - 1; j >= 0; j--) {
-      if (board._memory2D[i][j] != board._memory2D[i][j - 1] & board._memory2D[i][j] != board._memory2D[i][j + 1] & transposed._memory2D[i][j] != board._memory2D[i][j + 1] & transposed._memory2D[i][j] != board._memory2D[i][j - 1]){
-        uncombinableTiles.push([i, j])
-      }
-    }
-  }
-  console.log(uncombinableTiles)
-  if (uncombinableTiles.length == 16) {
-    return true
-  }
-}
-  
 function getBoard() {
   let tiles = '';
   for (var i = 0; i < cols; i++) {
@@ -214,4 +211,15 @@ function getBoard() {
     }
   }
   return tiles;
+}
+
+function restart() {
+  cols = rowSlider.value();
+  board._memory2D = Array(cols).fill(0);
+  for (var i = 0; i < cols; i++) { 
+    board._memory2D[i] = Array(cols).fill(0);
+  }
+  drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
+  drawQuadrille(visual, {cellLength:LENGTH, outline: '#BBBBBB00'});
+  pushTile(); pushTile(); score = 0;
 }

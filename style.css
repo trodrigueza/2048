@@ -1,7 +1,87 @@
 html, body {
   margin: 0;
   padding: 0;
+  font-family: helvetica;
 }
 canvas {
   display: block;
+  padding: 20px;
+  margin: auto;
+  display: block;
+  width: 800px;
+  height: 600px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
+button {
+  font-size: 1em;
+  font-family: helvetica;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 2px solid rgb(237, 237, 237);
+  background-color: rgb(158, 255, 105);
+}
+a {
+  color: rgb(158, 255, 105);
+}
+h2, p {
+  font-size: 1em;
+  font-family: courier;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  top: 10%;
+}
+
+#header
+  {
+    text-align: center;
+    font-size: min(100%, 2vmin);
+    font-family: courier;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 1px;
+  }
+
+#footer
+  {
+      text-align: center;
+      font-size: min(100%, 2vmin);
+      font-family: courier;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+  }
+
+.centerr
+  {
+    position: fixed;
+    right: 48%;
+    bottom: 50%;
+  }
+
+.leftt
+  {
+    position: fixed;
+    left: 48%;
+    bottom: 10%;
+  }
+
+.downn
+  {
+    position: fixed;
+    left: 48%;
+    bottom: 20%;
+  }
