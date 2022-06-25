@@ -1,4 +1,4 @@
-const LENGTH = 80;
+const LENGTH = 100;
 let board, visual;
 let row, col;
 let score = 0; let scoreP;
@@ -222,4 +222,53 @@ function restart() {
   drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
   drawQuadrille(visual, {cellLength:LENGTH, outline: '#BBBBBB00'});
   pushTile(); pushTile(); score = 0;
+}
+
+function touchStarted() {
+  x1 = mouseX;
+  y1 = mouseY;
+}
+
+function touchEnded() {
+  x2 = mouseX;
+  y2 = mouseY;
+  console.log(x1 - x2, y1 - y2);
+  if (x1 - x2 > -100 & Math.abs(x2-x1) > Math.abs(y2-y1)) {
+    prev = getBoard();
+    
+    board.transpose();
+ 
+    board.reflect();
+    board.transpose();
+    moveCmove()
+    move();
+    board.transpose();
+    board.reflect();
+    
+    board.transpose();
+    post = getBoard();
+    checkAndPush(prev, post)
+  } else if (x1 - x2 < 100 & Math.abs(x2-x1) > Math.abs(y2-y1)) {
+    prev = getBoard();
+    moveCmove()
+    post = getBoard();
+    checkAndPush(prev, post)
+  } 
+  if (y1 - y2 > 100 & Math.abs(x2-x1) < Math.abs(y2-y1)) {
+    prev = getBoard();
+    board.reflect();
+    board.transpose();
+    moveCmove()
+    board.transpose();
+    board.reflect();
+    post = getBoard();
+    checkAndPush(prev, post)
+  } else if (y1 - y2 < 100 & Math.abs(x2-x1) < Math.abs(y2-y1)) {
+    prev = getBoard();
+    board.transpose();
+    moveCmove()
+    board.transpose();
+    post = getBoard();
+    checkAndPush(prev, post)
+  }
 }
