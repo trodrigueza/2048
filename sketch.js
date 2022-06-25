@@ -225,6 +225,9 @@ function restart() {
 }
 
 function touchStarted() {
+  if(!fullscreen()) {
+    fullscreen(true);
+  }
   x1 = mouseX;
   y1 = mouseY;
 }
@@ -271,4 +274,12 @@ function touchEnded() {
     post = getBoard();
     checkAndPush(prev, post)
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+document.ontouchmove = function(e) {
+  e.preventDefault();
 }
