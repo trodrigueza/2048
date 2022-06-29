@@ -1,7 +1,8 @@
 const LENGTH = 80;
 let board, visual;
 let row, col;
-let score = 0; let scoreP;
+let score = 0; 
+let scoreP;
 let cols;
 let play = false;
 let playButton, restartButton, rowSlider;
