@@ -224,4 +224,8 @@ function restart() {
   drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
   drawQuadrille(visual, {cellLength:LENGTH, outline: '#BBBBBB00'});
   pushTile(); pushTile(); score = 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 640a0bc5902df7030615ad72659f9a8bb693e6a3
