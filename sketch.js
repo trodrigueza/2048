@@ -34,7 +34,7 @@ function setup() {
 }
 
 function draw() {
-  background('#FFFFFF');
+  background('#292929');
   if(!play){
     playButton.mousePressed(() => {play = true; playButton.hide();});
   }
