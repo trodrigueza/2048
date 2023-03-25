@@ -225,3 +225,64 @@ function restart() {
   drawQuadrille(visual, {cellLength:LENGTH, outline: '#BBBBBB00'});
   pushTile(); pushTile(); score = 0;
 }
+
+function moveCmove() {
+  move();
+  combine();
+  move();
+}
+
+function checkAndPush(prev, post) {
+  if (prev != post) {
+    pushTile();
+  }
+}
+
+function touchStarted() {
+  x1 = mouseX;
+  y1 = mouseY;
+}
+
+function touchEnded() {
+  x2 = mouseX;
+  y2 = mouseY;
+ 
+  if (x1 - x2 > -100 & Math.abs(x2-x1) > Math.abs(y2-y1)) {
+    prev = getBoard();
+    
+    board.transpose();
+ 
+    board.reflect();
+    board.transpose();
+    moveCmove()
+    move();
+    board.transpose();
+    board.reflect();
+    
+    board.transpose();
+    post = getBoard();
+    checkAndPush(prev, post)
+  } else if (x1 - x2 < 100 & Math.abs(x2-x1) > Math.abs(y2-y1)) {
+    prev = getBoard();
+    moveCmove()
+    post = getBoard();
+    checkAndPush(prev, post)
+  } 
+  if (y1 - y2 > 100 & Math.abs(x2-x1) < Math.abs(y2-y1)) {
+    prev = getBoard();
+    board.reflect();
+    board.transpose();
+    moveCmove()
+    board.transpose();
+    board.reflect();
+    post = getBoard();
+    checkAndPush(prev, post)
+  } else if (y1 - y2 < 100 & Math.abs(x2-x1) < Math.abs(y2-y1)) {
+    prev = getBoard();
+    board.transpose();
+    moveCmove()
+    board.transpose();
+    post = getBoard();
+    checkAndPush(prev, post)
+  }
+}
