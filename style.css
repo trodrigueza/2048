@@ -21,7 +21,7 @@ canvas {
 button {
   font-size: 1em;
   font-family: helvetica;
-  color: rgb(237, 237, 237);
+  color: #292929;
   cursor: pointer;
   padding-left: 10px;
   padding-right: 10px;
