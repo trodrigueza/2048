@@ -1,10 +1,11 @@
 const LENGTH = 80;
 let board, visual;
 let row, col;
-let score = 0; let scoreP;
+let score = 0; 
+let scoreP;
 let cols;
 let play = false;
-let playButton, restartButton, rowSlider;
+let playButton, restartButton;
 
 function preload() {
   pics = [];
@@ -14,11 +15,12 @@ function preload() {
 }
 
 function setup() {
-  rowSlider = createSlider(4, 5, 4, 1).hide();
-  cols = rowSlider.value();
-  rowSlider.changed(restart);
+  cols = 4;
   canvas = createCanvas(cols * LENGTH, cols * LENGTH);
-  board = createQuadrille(cols, cols);
+  board = createQuadrille([[0, 0, 0, 0],
+                          [0, 0, 0, 0],
+                          [0, 0, 0, 0],
+                          [0, 0, 0, 0]]);
   visual = createQuadrille(cols, cols);
   pushTile();
   pushTile();
@@ -214,7 +216,7 @@ function getBoard() {
 }
 
 function restart() {
-  cols = rowSlider.value();
+  cols = 4;
   board._memory2D = Array(cols).fill(0);
   for (var i = 0; i < cols; i++) { 
     board._memory2D[i] = Array(cols).fill(0);
@@ -222,61 +224,4 @@ function restart() {
   drawQuadrille(board, {cellLength: LENGTH, outline: '#BBBBBB14', board: true}); 
   drawQuadrille(visual, {cellLength:LENGTH, outline: '#BBBBBB00'});
   pushTile(); pushTile(); score = 0;
-}
-
-function touchStarted() {
-  x1 = mouseX;
-  y1 = mouseY;
-}
-
-function touchEnded() {
-  x2 = mouseX;
-  y2 = mouseY;
-  console.log(x1 - x2, y1 - y2);
-  if (x1 - x2 > -100 & Math.abs(x2-x1) > Math.abs(y2-y1)) {
-    prev = getBoard();
-    
-    board.transpose();
- 
-    board.reflect();
-    board.transpose();
-    moveCmove()
-    move();
-    board.transpose();
-    board.reflect();
-    
-    board.transpose();
-    post = getBoard();
-    checkAndPush(prev, post)
-  } else if (x1 - x2 < 100 & Math.abs(x2-x1) > Math.abs(y2-y1)) {
-    prev = getBoard();
-    moveCmove()
-    post = getBoard();
-    checkAndPush(prev, post)
-  } 
-  if (y1 - y2 > 100 & Math.abs(x2-x1) < Math.abs(y2-y1)) {
-    prev = getBoard();
-    board.reflect();
-    board.transpose();
-    moveCmove()
-    board.transpose();
-    board.reflect();
-    post = getBoard();
-    checkAndPush(prev, post)
-  } else if (y1 - y2 < 100 & Math.abs(x2-x1) < Math.abs(y2-y1)) {
-    prev = getBoard();
-    board.transpose();
-    moveCmove()
-    board.transpose();
-    post = getBoard();
-    checkAndPush(prev, post)
-  }
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
-
-document.ontouchmove = function(e) {
-  e.preventDefault();
 }
